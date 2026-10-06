@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akciğer Kanseri Risk Tahmini</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .btn-primary {
+        background-color: #0d6efd;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card p-4">
+            <h2 class="text-center mb-3">
+              🫁 Akciğer Kanseri Risk Tahmini Arayüzü
+            </h2>
+            <p class="text-muted text-center mb-4">
+              Lütfen hastaya ait bilgileri ve semptomları eksiksiz giriniz.
+            </p>
+            <hr />
+
+            <form id="riskForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label font-weight-bold">Yaş</label>
+                  <input
+                    type="number"
+                    id="yas"
+                    class="form-control"
+                    value="45"
+                    min="1"
+                    max="120"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Sigara Kullanımı</label>
+                  <select id="sigara" class="form-select">
+                    <option value="0">Hayır</option>
+                    <option value="1">Evet</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Kronik Öksürük</label>
+                  <select id="oksuruk" class="form-select">
+                    <option value="0">Hayır</option>
+                    <option value="1">Evet</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Nefes Darlığı</label>
+                  <select id="nefes" class="form-select">
+                    <option value="0">Hayır</option>
+                    <option value="1">Evet</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="text-center mt-4">
+                <button
+                  type="button"
+                  onclick="tahminEt()"
+                  class="btn btn-primary w-100 fs-5"
+                >
+                  Risk Hesapla
+                </button>
+              </div>
+            </form>
+
+            <div
+              id="sonucAlani"
+              class="alert mt-4 d-none text-center fs-5"
+              role="alert"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function tahminEt() {
+        const yas = parseInt(document.getElementById("yas").value);
+        const sigara = parseInt(document.getElementById("sigara").value);
+        const oksuruk = parseInt(document.getElementById("oksuruk").value);
+        const nefes = parseInt(document.getElementById("nefes").value);
+
+        let skor = 0;
+        if (yas > 50) skor += 2;
+        if (sigara === 1) skor += 3;
+        if (oksuruk === 1) skor += 2;
+        if (nefes === 1) skor += 2;
+
+        const sonucDiv = document.getElementById("sonucAlani");
+        sonucDiv.classList.remove(
+          "d-none",
+          "alert-success",
+          "alert-warning",
+          "alert-danger",
+        );
+
+        if (skor <= 2) {
+          sonucDiv.classList.add("alert-success");
+          sonucDiv.innerHTML =
+            "<strong>Düşük Risk:</strong> Hastanın semptom seviyesi düşük görünmektedir.";
+        } else if (skor <= 5) {
+          sonucDiv.classList.add("alert-warning");
+          sonucDiv.innerHTML =
+            "<strong>Orta Risk:</strong> Düzenli kontrol ve doktor takibi önerilir.";
+        } else {
+          sonucDiv.classList.add("alert-danger");
+          sonucDiv.innerHTML =
+            "<strong>Yüksek Risk:</strong> En kısa sürede bir uzman hekime danışılmalıdır!";
+        }
+      }
+    </script>
+  </body>
+</html>
